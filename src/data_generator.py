@@ -23,7 +23,13 @@ def generate_dataset(n=100):
         features   = random.sample(FEATURES, random.randint(1, 3))
         tolerance  = random.choice(TOLERANCES)
         batch_size = random.randint(10, 1000)
-        operations = OPERATION_MAP[material]
+        ops = OPERATION_MAP[material].copy()
+        # 30% chance ki ek optional operation add ho
+        if random.random() > 0.7 and "Reaming" not in ops:
+            if "Drilling" in ops:
+                idx = ops.index("Inspection")
+                ops.insert(idx, "Deburring")
+        operations = ops
         rows.append({
             "part_id":    f"P{i+1:03d}",
             "material":   material,
